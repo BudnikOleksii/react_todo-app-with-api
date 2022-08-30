@@ -7,12 +7,12 @@ type Props = {
   text: string,
 };
 
-export const PageNavLink: FC<Props> = memo(({ to, text }) =>  (
+export const PageNavLink: FC<Props> = memo(({ to, text }) => (
   <NavLink
     to={to}
     className={({ isActive }) => classNames(
       'filter__link',
-      { selected: isActive }
+      { selected: isActive },
     )}
   >
     {text}

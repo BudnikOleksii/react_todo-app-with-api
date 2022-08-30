@@ -4,6 +4,7 @@ import React, {
   useContext, useEffect, useMemo, useState,
 } from 'react';
 import classNames from 'classnames';
+import { useParams } from 'react-router-dom';
 import { AuthContext } from './components/Auth/AuthContext';
 import {
   addTodo,
@@ -13,11 +14,10 @@ import {
 import { TodoItem } from './components/TodoItem';
 import { TodoFooter } from './components/TodoFooter';
 import { Notification } from './components/Notification';
-import { Todo, TodoUpdateFields } from './types/Todo';
+import { NewTodo, Todo, TodoUpdateFields } from './types/Todo';
 import { FilterType } from './types/FilterType';
 
 import './styles/index.scss';
-import { useParams } from 'react-router-dom';
 
 export const App: React.FC = () => {
   const user = useContext(AuthContext);
@@ -26,8 +26,7 @@ export const App: React.FC = () => {
   const [userId, setUserId] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
   const [loadingIds, setLoadingIds] = useState<number[]>([]);
-  const { filterType } = useParams()
-
+  const { filterType } = useParams();
 
   const handleError = useCallback(
     (er: string) => {
@@ -60,11 +59,26 @@ export const App: React.FC = () => {
       return;
     }
 
-    addTodo({
+    const newTodo: NewTodo = {
       title: newTodoTitle,
       userId,
       completed: false,
-    }).then((newTodo: Todo) => setTodos((prev) => [...prev, newTodo]))
+    };
+
+    const optimisticId = -(todos.length);
+    const optimisticTodo = {
+      id: optimisticId,
+      ...newTodo,
+    };
+
+    setTodos((prev) => [...prev, optimisticTodo]);
+
+    addTodo(newTodo)
+      .then((addedTodo) => (
+        setTodos(prev => prev.map(todo => (
+          todo.id === optimisticId ? addedTodo : todo
+        )))
+      ))
       .catch(() => handleError('Unable to add a todo'))
       .finally(() => setNewTodoTitle(''));
   };

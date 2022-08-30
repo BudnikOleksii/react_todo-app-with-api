@@ -4,9 +4,9 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import './styles/index.scss';
 
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import { App } from './App';
 import { AuthProvider } from './components/Auth/AuthContext';
-import { HashRouter, Route, Routes } from 'react-router-dom';
 
 const AppWithProvider = () => (
   <AuthProvider>
@@ -15,7 +15,7 @@ const AppWithProvider = () => (
 );
 
 const Root = () => (
-  <HashRouter >
+  <HashRouter>
     <Routes>
       <Route path="/">
         <Route index element={<AppWithProvider />} />
