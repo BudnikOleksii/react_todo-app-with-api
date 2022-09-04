@@ -106,11 +106,7 @@ export const TodoItem: FC<Props> = memo((props) => {
           <span
             data-cy="TodoTitle"
             className="todo__title"
-            onClick={(event) => {
-              if (event.detail === 2) {
-                setIsDoubleClicked(true);
-              }
-            }}
+            onDoubleClick={() => setIsDoubleClicked(true)}
             onKeyDown={() => {}}
           >
             {title}

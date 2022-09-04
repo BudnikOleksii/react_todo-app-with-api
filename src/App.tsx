@@ -5,6 +5,7 @@ import React, {
 } from 'react';
 import classNames from 'classnames';
 import { useParams } from 'react-router-dom';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { AuthContext } from './components/Auth/AuthContext';
 import {
   addTodo,
@@ -79,7 +80,10 @@ export const App: React.FC = () => {
           todo.id === optimisticId ? addedTodo : todo
         )))
       ))
-      .catch(() => handleError('Unable to add a todo'))
+      .catch(() => {
+        handleError('Unable to add a todo');
+        setTodos(prev => prev.filter(todo => todo.id !== optimisticId));
+      })
       .finally(() => setNewTodoTitle(''));
   };
 
@@ -118,7 +122,6 @@ export const App: React.FC = () => {
     todos.forEach(todo => {
       if (todo.completed !== newCompleted) {
         idsForUpdate.push(todo.id);
-        // handleTodoChange(todo.id, { completed: newCompleted });
       }
     });
 
@@ -183,15 +186,22 @@ export const App: React.FC = () => {
       {todos.length > 0 && (
         <div className="todoapp__content">
           <section className="todoapp__main" data-cy="TodoList">
-            {visibleTodos.map(todo => (
-              <TodoItem
-                key={todo.id}
-                todo={todo}
-                handleRemoveTodo={handleRemoveTodo}
-                handleUpdate={handleTodoChange}
-                isLoading={loadingIds.includes(todo.id)}
-              />
-            ))}
+            <TransitionGroup>
+              {visibleTodos.map(todo => (
+                <CSSTransition
+                  key={todo.id}
+                  classNames="slide"
+                  timeout={300}
+                >
+                  <TodoItem
+                    todo={todo}
+                    handleRemoveTodo={handleRemoveTodo}
+                    handleUpdate={handleTodoChange}
+                    isLoading={loadingIds.includes(todo.id)}
+                  />
+                </CSSTransition>
+              ))}
+            </TransitionGroup>
           </section>
 
           <TodoFooter
@@ -203,9 +213,7 @@ export const App: React.FC = () => {
         </div>
       )}
 
-      {errorMessage && (
-        <Notification message={errorMessage} setMessage={setErrorMessage} />
-      )}
+      <Notification message={errorMessage} setMessage={setErrorMessage} />
     </div>
   );
 };

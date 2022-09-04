@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { FC } from 'react';
+import classNames from 'classnames';
 
 type Props = {
   message: string,
@@ -9,7 +10,10 @@ type Props = {
 export const Notification: FC<Props> = ({ message, setMessage }) => (
   <div
     data-cy="Notification"
-    className="notification is-danger is-light has-text-weight-normal"
+    className={classNames(
+      'notification is-danger is-light has-text-weight-normal',
+      { 'hidden': !message }
+    )}
   >
     <button
       data-cy="HideErrorButton"
