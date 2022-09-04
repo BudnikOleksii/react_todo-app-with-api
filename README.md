@@ -12,7 +12,7 @@
 1. Add a todo(write title and press `Enter`);
 1. Toggle the `completed` status by click on checkbox for current todo;
 1. Toggle the completed status of all the todos with the button.
-   ![Toggle button](https://prnt.sc/ZbvirCu4aSsT)
+   ![Toggle button](./src/ToggleBtn.png)
 1. Edit todo title on double click;
     - save changes on the form submit (just press `Enter` or click in another place);
     - cancel editing by pressing key `Ecs`;
