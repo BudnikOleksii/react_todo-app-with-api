@@ -12,7 +12,7 @@ export const Notification: FC<Props> = ({ message, setMessage }) => (
     data-cy="Notification"
     className={classNames(
       'notification is-danger is-light has-text-weight-normal',
-      { 'hidden': !message }
+      { hidden: !message },
     )}
   >
     <button
